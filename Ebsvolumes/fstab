@@ -1,0 +1,6 @@
+GNU nano 7.2                                                                       /etc/fstab                                                                                
+LABEL=cloudimg-rootfs   /        ext4   discard,commit=30,errors=remount-ro     0 1
+LABEL=BOOT      /boot   ext4    defaults        0 2
+LABEL=UEFI      /boot/efi       vfat    umask=0077      0 1
+UUID=40b1a045-ae43-429e-9ef0-a91ead102b96 /mnt/data ext4 defaults,nofail 0 0
+
