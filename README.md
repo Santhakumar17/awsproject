@@ -148,4 +148,3 @@ Learning/
 
 ---
 
-> 🧠 Let me know if you want a Terraform script or a printable version of the architecture diagram!
