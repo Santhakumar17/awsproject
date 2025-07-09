@@ -4,7 +4,9 @@
 ## Step-by-step Summary
 
 - I created **two Elastic Block Store (EBS) volumes** of 10 GB each.
-- Then, I **attached both volumes** to an EC2 instance (`ebsvolumes.png`).
+- Then, I **attached both volumes** to an EC2 instance:
+
+  ![EBS Volumes](./ebsvolumes.png)
 
 - After connecting via SSH, I ran:
   ```bash
@@ -76,12 +78,14 @@
 
 - Make the script executable:
   ```bash
-  chmod +x list_unmountedvolumes.sh
+  chmod +x list_unmounvolumes.sh
   ```
 
 - Execute the script:
   ```bash
-  ./list_unmountedvolumes.sh
+  ./list_unmounvolumes.sh
   ```
 
-- The output will list the **unmounted volumes** (`output.png`).
+- The output will list the **unmounted volumes**:
+
+  ![Unattached Volumes Output](./output.png)
