@@ -1,3 +1,4 @@
+
 # 🛠️ AWS VPC Setup – Mumbai Region (ap-south-1)
 
 This project demonstrates a custom AWS VPC architecture setup in the Mumbai (`ap-south-1`) region with public and private subnets, an Internet Gateway, a NAT Gateway, and route tables.
@@ -11,6 +12,54 @@ This project demonstrates a custom AWS VPC architecture setup in the Mumbai (`ap
 - **Total Subnets:** 4 (2 public + 2 private)
 - **Internet Access:** Internet Gateway (for public), NAT Gateway (for private)
 - **Route Tables:** 1 public + 1 private
+
+---
+
+## 🧭 Logical Flow Diagram (ASCII)
+
+```text
+             ┌────────────────────────────┐
+             │          VPC               │
+             │  (10.0.0.0/16 - ap-south-1)│
+             └────────────────────────────┘
+                        │
+                        ▼
+                ┌──────────────┐
+                │ Internet     │
+                │ Gateway (IGW)│
+                └────┬─────────┘
+                     │
+        ┌────────────┴────────────┐
+        │                         │
+        ▼                         ▼
+┌─────────────┐           ┌─────────────┐
+│ Public RT   │           │ Public RT   │
+│ 0.0.0.0/0 → │           │ 0.0.0.0/0 → │
+│ IGW         │           │ IGW         │
+└─────┬───────┘           └─────┬───────┘
+      │                         │
+      ▼                         ▼
+┌─────────────┐          ┌──────────────┐
+│ Public Sub1 │          │ Public Sub2  │
+│ AZ-1a       │          │ AZ-1b        │
+└─────────────┘          └──────────────┘
+      │                         │
+      ▼                         ▼
+┌─────────────┐         ┌───────────────┐
+│ NAT Gateway │         │ Elastic IP    │
+│ (in PubSub1)│         └───────────────┘
+└─────┬───────┘
+      │
+┌─────▼─────────────────────────────────┐
+│       Private Route Table             │
+│ 0.0.0.0/0 → NAT Gateway               │
+└─────┬────────────┬────────────────────┘
+      ▼            ▼
+┌─────────────┐ ┌─────────────┐
+│ Private Sub1│ │ Private Sub2│
+│ AZ-1a       │ │ AZ-1b       │
+└─────────────┘ └─────────────┘
+```
 
 ---
 
@@ -55,14 +104,16 @@ This project demonstrates a custom AWS VPC architecture setup in the Mumbai (`ap
 
 ---
 
-## 🧭 Route Tables
+## 🛣️ Route Tables
 
 ### 🔹 Public Route Table
+
 - **Destination:** `0.0.0.0/0`
 - **Target:** Internet Gateway
 - **Associated Subnets:** Public Subnet 1 & 2
 
 ### 🔸 Private Route Table
+
 - **Destination:** `0.0.0.0/0`
 - **Target:** NAT Gateway ✅
 - **Associated Subnets:** Private Subnet 1 & 2
@@ -80,5 +131,21 @@ This project demonstrates a custom AWS VPC architecture setup in the Mumbai (`ap
 
 ---
 
-## 📎 File Structure
+## 📎 Directory Structure
 
+```
+Learning/
+└── AWS/
+    ├── README.md
+    └── images/
+        ├── elasticip.png
+        ├── internetgateway.png
+        ├── nat.png
+        ├── routetable.png
+        ├── subnet.png
+        └── vpc.png
+```
+
+---
+
+> 🧠 Let me know if you want a Terraform script or a printable version of the architecture diagram!
