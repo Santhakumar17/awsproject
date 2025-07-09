@@ -144,7 +144,3 @@ Learning/
         ├── routetable.png
         ├── subnet.png
         └── vpc.png
-```
-
----
-
