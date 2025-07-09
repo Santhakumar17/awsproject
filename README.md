@@ -1,65 +1,29 @@
-# 🛠️ AWS VPC Architecture - Mumbai Region (ap-south-1)
+# 🛠️ AWS VPC Setup – Mumbai Region (ap-south-1)
 
-This document describes the setup of a Virtual Private Cloud (VPC) in the Mumbai (ap-south-1) region, including subnets, gateways, route tables, and IP ranges for a highly available network design.
+This project demonstrates a custom AWS VPC architecture setup in the Mumbai (`ap-south-1`) region with public and private subnets, an Internet Gateway, a NAT Gateway, and route tables.
 
 ---
 
-## 🗺️ Architecture Diagram
+## 🗺️ Architecture Overview
 
-            ┌────────────────────────────┐
-             │          VPC               │
-             │  (10.0.0.0/16 - ap-south-1)│
-             └────────────────────────────┘
-                        │
-                        ▼
-                ┌──────────────┐
-                │ Internet     │
-                │ Gateway (IGW)│
-                └────┬─────────┘
-                     │
-        ┌────────────┴────────────┐
-        │                         │
-        ▼                         ▼
-┌─────────────┐           ┌─────────────┐
-│ Public RT   │           │ Public RT   │
-│ 0.0.0.0/0 → │           │ 0.0.0.0/0 → │
-│ IGW         │           │ IGW         │
-└─────┬───────┘           └─────┬───────┘
-      │                         │
-      ▼                         ▼
-┌─────────────┐          ┌──────────────┐
-│ Public Sub1 │          │ Public Sub2  │
-│ AZ-1a       │          │ AZ-1b        │
-└─────────────┘          └──────────────┘
-      │                         │
-      ▼                         ▼
-┌─────────────┐         ┌───────────────┐
-│ NAT Gateway │         │ Elastic IP    │
-│ (in PubSub1)│         └───────────────┘
-└─────┬───────┘
-      │
-┌─────▼─────────────────────────────────┐
-│       Private Route Table             │
-│ 0.0.0.0/0 → NAT Gateway               │
-└─────┬────────────┬────────────────────┘
-      ▼            ▼
-┌─────────────┐ ┌─────────────┐
-│ Private Sub1│ │ Private Sub2│
-│ AZ-1a       │ │ AZ-1b       │
-└─────────────┘ └─────────────┘
-
+- **VPC CIDR Block:** `10.0.0.0/16`
+- **Availability Zones Used:** `ap-south-1a`, `ap-south-1b`
+- **Total Subnets:** 4 (2 public + 2 private)
+- **Internet Access:** Internet Gateway (for public), NAT Gateway (for private)
+- **Route Tables:** 1 public + 1 private
 
 ---
 
 ## 🌐 VPC Configuration
 
-- **Region:** ap-south-1 (Mumbai)
-- **VPC CIDR Block:** `10.0.0.0/16`
-- **Total Usable IPs:** 65,534
+- Created a VPC with CIDR block `10.0.0.0/16`
+- Supports up to **65,534 usable IPs**
+
+![VPC](images/vpc.png)
 
 ---
 
-## 📦 Subnet Configuration
+## 🧱 Subnet Design
 
 | Subnet Type | Name             | CIDR Block     | Availability Zone |
 |-------------|------------------|----------------|-------------------|
@@ -68,56 +32,53 @@ This document describes the setup of a Virtual Private Cloud (VPC) in the Mumbai
 | Private     | Private Subnet 1 | `10.0.3.0/24`  | ap-south-1a       |
 | Private     | Private Subnet 2 | `10.0.4.0/24`  | ap-south-1b       |
 
+![Subnets](images/subnet.png)
+
 ---
 
 ## 🌍 Internet Gateway
 
-- Created an **Internet Gateway**
-- Attached it to the VPC
+- Created and attached to the VPC to allow outbound internet traffic from public subnets.
 
-📷 _Refer: `images/internetgateway.png`_
+![Internet Gateway](images/internetgateway.png)
 
 ---
 
-## 🌐 NAT Gateway
+## 🌐 NAT Gateway & Elastic IP
 
-- Allocated an **Elastic IP**
-- Created a **NAT Gateway** in a public subnet
-- Used to provide internet access to private subnets
+- Allocated an Elastic IP.
+- Created a NAT Gateway inside **Public Subnet 1 (ap-south-1a)**.
+- Used by **private subnets** to access the internet securely.
 
-📷 _Refer: `images/elasticip.png`, `images/nat.png`_
+![Elastic IP](images/elasticip.png)
+![NAT Gateway](images/nat.png)
 
 ---
 
 ## 🧭 Route Tables
 
 ### 🔹 Public Route Table
-
 - **Destination:** `0.0.0.0/0`
 - **Target:** Internet Gateway
-- **Associated Subnets:** Public Subnet 1, Public Subnet 2
+- **Associated Subnets:** Public Subnet 1 & 2
 
 ### 🔸 Private Route Table
-
 - **Destination:** `0.0.0.0/0`
-- **Target:** NAT Gateway ✅ (fixed)
-- **Associated Subnets:** Private Subnet 1, Private Subnet 2
+- **Target:** NAT Gateway ✅
+- **Associated Subnets:** Private Subnet 1 & 2
 
-📷 _Refer: `images/routetable.png`_
+![Route Tables](images/routetable.png)
 
 ---
 
 ## ✅ Summary
 
-- VPC created with 4 subnets across 2 AZs (high availability)
-- Internet Gateway for public access
-- NAT Gateway for private subnet outbound access
-- Properly configured route tables
-- Scalable and production-ready network design
+- 🔐 Public subnets are internet-facing (via IGW)
+- 🔒 Private subnets access internet via NAT
+- 📈 Architecture supports high availability (spread across AZs)
+- 🚀 Ready for launching EC2, RDS, or microservice apps
 
+---
 
+## 📎 File Structure
 
-
-
-
- 
