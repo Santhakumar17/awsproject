@@ -20,7 +20,7 @@ This document demonstrates the creation of an IAM user, attachment of a read/wri
 ## 📸 Screenshots
 
 ### IAM User Created
-![IAM User](./Iamuser.pngmuser.png)
+![IAM User](./Iamuser.png)
 
 ### Permissions Attached to IAM User
 ![Permissions Screenshot](./permisson.png)
